@@ -367,12 +367,14 @@ export function SettingsPage() {
           <div className="flex items-center justify-between gap-4 rounded-xl border border-line/70 bg-abyss/40 px-4 py-3">
             <div>
               <p className="text-sm font-medium text-ink">
-                {mode === 'supabase' ? 'Supabase (cloud)' : 'Local browser storage'}
+                {mode === 'supabase' ? 'Supabase (cloud)' : mode === 'local' ? 'Local browser storage' : 'Supabase unavailable'}
               </p>
               <p className="text-xs text-muted">
                 {mode === 'supabase'
                   ? 'Records are stored in PostgreSQL with Row Level Security.'
-                  : 'Records live in this browser until Supabase credentials are configured.'}
+                  : mode === 'local'
+                    ? 'Records live in this browser during explicitly enabled development mode.'
+                    : 'Configure valid Supabase credentials to access account data.'}
               </p>
             </div>
           </div>

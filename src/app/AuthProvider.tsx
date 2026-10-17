@@ -7,11 +7,10 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { authService, type AuthSession, type AuthServiceCaps } from '@/data';
-import { dataMode } from '@/data';
+import { authService, dataMode, type AuthSession, type AuthServiceCaps } from '@/data';
 
 interface AuthContextValue {
-  status: 'loading' | 'signedOut' | 'signedIn' | 'unverified';
+  status: 'loading' | 'signedOut' | 'signedIn' | 'unverified' | 'configurationError';
   session: AuthSession | null;
   /** Set while waiting for email verification (Supabase mode only). */
   pendingVerificationEmail: string | null;
@@ -37,6 +36,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [pendingVerificationEmail, setPending] = useState<string | null>(null);
 
   useEffect(() => {
+    if (dataMode === 'unconfigured') {
+      setStatus('configurationError');
+      return;
+    }
     let active = true;
     void authService
       .getSession()

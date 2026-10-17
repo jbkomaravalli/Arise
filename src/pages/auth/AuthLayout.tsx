@@ -36,6 +36,15 @@ export function AuthLayout({
             <p className="mt-2 text-sm leading-relaxed text-muted">{subtitle}</p>
           </div>
 
+          {dataMode === 'unconfigured' && (
+            <div role="alert" className="mb-5 rounded-xl border border-danger/35 bg-danger/10 px-3.5 py-3">
+              <p className="text-sm leading-relaxed text-danger">
+                Supabase is not configured for this deployment. Set VITE_SUPABASE_URL and
+                VITE_SUPABASE_ANON_KEY in the hosting environment, then rebuild and redeploy.
+              </p>
+            </div>
+          )}
+
           {children}
         </div>
 
@@ -44,7 +53,9 @@ export function AuthLayout({
         <p className={cn('mt-6 text-center text-[0.6875rem] tracking-wide text-faint')}>
           {dataMode === 'local'
             ? 'Local mode — accounts and records are stored in this browser until Supabase is configured.'
-            : 'Secured by Supabase Auth · Row Level Security enforced'}
+            : dataMode === 'supabase'
+              ? 'Secured by Supabase Auth · Row Level Security enforced'
+              : 'Authentication unavailable until Supabase is configured'}
         </p>
       </div>
     </div>

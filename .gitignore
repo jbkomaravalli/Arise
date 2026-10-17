@@ -19,9 +19,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Environment — never commit secrets
-.env
-.env.local
-.env.*.local
+.env*
 !.env.example
 
 # Editor / OS

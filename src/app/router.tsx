@@ -45,6 +45,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   if (status === 'loading') return <FullScreenStatus label="Establishing connection…" />;
+  if (status === 'configurationError') return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   if (status === 'signedOut') return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   if (status === 'unverified') return <Navigate to="/signup" replace />;
   return <>{children}</>;

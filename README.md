@@ -94,9 +94,9 @@ cp .env.example .env
 npm run dev          # http://localhost:5173
 ```
 
-With no `.env` values, ARISE runs in **Local mode**: accounts and progress are
-stored in the browser (localStorage, salted PBKDF2 password hashes). Add the two
-Supabase variables below to switch to cloud mode.
+For local/demo use without Supabase, set `VITE_ENABLE_LOCAL_MODE=true` in a
+development environment. Production builds require Supabase and never fall
+back to browser storage.
 
 ---
 
@@ -167,8 +167,10 @@ the server is authoritative. `npm run db:verify` asserts the two engines agree,
 so the UI and the database can never silently drift.
 
 **Data layer.** `src/data/repository.ts` defines the interface; the app selects
-`localRepository` (localStorage) or `supabaseRepository` based on the presence of
-`VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`. All reads in Supabase mode come
+`localRepository` (localStorage) only when explicitly enabled for development,
+or `supabaseRepository` when valid `VITE_SUPABASE_URL` +
+`VITE_SUPABASE_ANON_KEY` credentials are present. Production never selects the
+local repository. All reads in Supabase mode come
 from one `arise_bootstrap()` RPC; all writes go through the nine operation RPCs.
 
 **Never trust the browser.** XP amounts, level-ups, rank-ups, achievement
